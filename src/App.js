@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/person.js';
+import Radium, { StyleRoot } from 'radium';
 
 class App extends Component {
   state = {
     person: [
-      { id:'vgd1', name: "Reshma", age: 26 },
-      { id:'bef3', name: "Satish", age: 27 },
-      { id:'nbf6', name: "Jaya", age: 26 }
+      { id: 'vgd1', name: "Reshma", age: 26 },
+      { id: 'bef3', name: "Satish", age: 27 },
+      { id: 'nbf6', name: "Jaya", age: 26 }
     ],
     otherstate: 'somevalue',
     showPerson: false
@@ -24,16 +25,17 @@ class App extends Component {
 
   /*Two Way Data Binding*/
 
-  nameChangedhandler = (event,id) => {
-   const changeInputIndex = this.state.person.findIndex((p)=>{
-     return p.id===id});
-     const changedPerson={...this.state.person[changeInputIndex]};
-     changedPerson.name=event.target.value;
-     const persons=[...this.state.person];
-     persons[changeInputIndex]=changedPerson;
+  nameChangedhandler = (event, id) => {
+    const changeInputIndex = this.state.person.findIndex((p) => {
+      return p.id === id
+    });
+    const changedPerson = { ...this.state.person[changeInputIndex] };
+    changedPerson.name = event.target.value;
+    const persons = [...this.state.person];
+    persons[changeInputIndex] = changedPerson;
 
     this.setState({
-      person:persons
+      person: persons
 
     });
   }
@@ -62,12 +64,16 @@ class App extends Component {
 
     const buttonStyle = {
       backgroundColor: 'green',        // make any variable of object type, property of css & its value is string
-      color:'white',
+      color: 'white',
       border: '2px solid grey',
       padding: '8px',
       font: 'inherit',
       cursor: 'pointer',
-      boxShadow: '2px 3px 3px grey'
+      boxShadow: '2px 3px 3px grey',
+      ':hover': {
+        backgroundColor: 'pink',
+        color: 'black'
+      }
     }
 
     let persons = null;
@@ -79,8 +85,8 @@ class App extends Component {
           {
             this.state.person.map((person, index) => {
               return <Person name={person.name} age={person.age} key={person.id}
-              click={() => this.deletePersonHandler(index)}  
-              changeInput={(event)=>this.nameChangedhandler(event,person.id)}/>
+                click={() => this.deletePersonHandler(index)}
+                changeInput={(event) => this.nameChangedhandler(event, person.id)} />
             })
           }
 
@@ -106,33 +112,40 @@ class App extends Component {
         </div>
       );
 
-      buttonStyle.backgroundColor='red';
+      buttonStyle.backgroundColor = 'red';
+      buttonStyle[':hover'] = {
+        backgroundColor: 'yellow',
+        color: 'red'
+
+      }
     }
 
-    let classes=[];
-     if(this.state.person.length<=2){
-       classes.push('red');  // classes=['red']
-     }
-     if(this.state.person.length<=1){
-       classes.push('bold');  // classes=['red','bold']
-     }
+    let classes = [];
+    if (this.state.person.length <= 2) {
+      classes.push('red');  // classes=['red']
+    }
+    if (this.state.person.length <= 1) {
+      classes.push('bold');  // classes=['red','bold']
+    }
 
     return (
-      <div className="App">
-        <h1>I am React App</h1>
-        <p className={classes.join(' ')}>This is really working</p>
-        {/*<button onClick={this.switchNameHandler.bind(this,"karishma!!")}>Switch Name</button>  OR U CAN USE anonymous function */}
-        <button style={buttonStyle}
+      <StyleRoot>
+        <div className="App">
+          <h1>I am React App</h1>
+          <p className={classes.join(' ')}>This is really working</p>
+          {/*<button onClick={this.switchNameHandler.bind(this,"karishma!!")}>Switch Name</button>  OR U CAN USE anonymous function */}
+          <button style={buttonStyle}
         /*onClick={() => this.switchNameHandler('Kaitrina!!')}*/ onClick={this.togglePersonHandler} >Toggle Person</button>
 
-        {/*IF ELSE CONDITION IN JSX by using Ternory Operator to show Person Component */}
+          {/*IF ELSE CONDITION IN JSX by using Ternory Operator to show Person Component */}
 
-        {/*Person Data showed using (javascript-way)IF ELSE CONDITION in render function*/}
+          {/*Person Data showed using (javascript-way)IF ELSE CONDITION in render function*/}
 
-        {persons}
-      </div>
+          {persons}
+        </div>
+      </StyleRoot>
     );
   }
 }
 
-export default App;
+export default Radium(App);
