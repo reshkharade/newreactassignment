@@ -1,5 +1,5 @@
 import React from 'react';
-import './Person.css';
+import classes from './Person.css';     // used css modules
 
 
 const person = (props) => {
@@ -8,7 +8,7 @@ const person = (props) => {
 
 
     return (
-    <div className="person"  >  
+    <div className={classes.person}  >  
             {/*accessing function from parent component syntax: event={props.property defined into parent} */}
             <p onClick={props.click}> I Am {props.name} and I am {props.age} years old !</p>
             <p>{props.children}</p>

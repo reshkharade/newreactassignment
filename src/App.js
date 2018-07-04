@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import classes from './App.css';              //classes is object contaiing all classes which written in app.css file
 import Person from './Person/person.js';
 
 
@@ -113,19 +113,19 @@ class App extends Component {
      
     }
 
-    let classes = [];
+    let assignedClasses = [];
     if (this.state.person.length <= 2) {
-      classes.push('red');  // classes=['red']
+      assignedClasses.push(classes.red);  // classes=['red']
     }
     if (this.state.person.length <= 1) {
-      classes.push('bold');  // classes=['red','bold']
+      assignedClasses.push(classes.bold);  // classes=['red','bold']
     }
 
     return (
      
-        <div className="App">
+        <div className={classes.App}>  {/* used css module*/}
           <h1>I am React App</h1>
-          <p className={classes.join(' ')}>This is really working</p>
+          <p className={assignedClasses.join(' ')}>This is really working</p>
           {/*<button onClick={this.switchNameHandler.bind(this,"karishma!!")}>Switch Name</button>  OR U CAN USE anonymous function */}
           <button style={buttonStyle}
         /*onClick={() => this.switchNameHandler('Kaitrina!!')}*/ onClick={this.togglePersonHandler} >Toggle Person</button>
