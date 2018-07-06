@@ -1,33 +1,56 @@
 import React, { Component } from 'react';
 import classes from './App.css';              //classes is object contaiing all classes which written in app.css file
-import Person from './Person/person.js';
+import Persons from '../Components/Persons/Persons.js';
+import Cockpit from '../Components/Cockpit/Cockpit.js';
+import WithClass from '../Hoc/WithClass.js';
+
+ export const AuthContext = React.createContext(false);
 
 
 class App extends Component {
-  state = {
-    person: [
-      { id: 'vgd1', name: "Reshma", age: 26 },
-      { id: 'bef3', name: "Satish", age: 27 },
-      { id: 'nbf6', name: "Jaya", age: 26 }
-    ],
-    otherstate: 'somevalue',
-    showPerson: false
+
+  constructor(props) {
+    super(props);
+    console.log(props);
+    this.state = {
+      person: [
+        { id: 'vgd1', name: "Reshma", age: 26 },
+        { id: 'bef3', name: "Satish", age: 27 },
+        { id: 'nbf6', name: "Jaya", age: 26 }
+      ],
+      otherstate: 'somevalue',
+      showPerson: false,
+      authenticated: false
+    };
   }
+
+  componentWillMount() {
+    console.log(this.props.title);
+  }
+  // state = {
+  //   person: [
+  //     { id: 'vgd1', name: "Reshma", age: 26 },
+  //     { id: 'bef3', name: "Satish", age: 27 },
+  //     { id: 'nbf6', name: "Jaya", age: 26 }
+  //   ],
+  //   otherstate: 'somevalue',
+  //   showPerson: false
+  // }
 
   //switchNameHandler = (newName) => {
 
   //console.log('was clicked');  
   //DO NOT USE : this.state.person[0].name="Karishma"       bcz react will not understand  that state has changed  
-  // to avoid this keyword conflict always use arrow function
+  // to avoid this keyword conflict  always use arrow function
 
-  //*to render the chnages at the runtime ,used setstate method *//
+  //*to render the chnages at the runtime ,used setstate method *// }
 
 
   /*Two Way Data Binding*/
 
-  nameChangedhandler = (event, id) => {
+  nameChangedHandler = (event, id) => {
     const changeInputIndex = this.state.person.findIndex((p) => {
-      return p.id === id
+      return p.id === id;
     });
     const changedPerson = { ...this.state.person[changeInputIndex] };
     changedPerson.name = event.target.value;
@@ -58,35 +81,43 @@ class App extends Component {
     });
   }
 
+  loginHandler = () => {
+    this.setState({
+      authenticated: true,
+    })
+
+  }
+
+
+
   render() {
+    console.log("render life-cycle hooks checked");
 
     // INLINE STYING TO BUTTON
 
-    const buttonStyle = {
-      backgroundColor: 'green',        // make any variable of object type, property of css & its value is string
-      color: 'white',
-      border: '2px solid grey',
-      padding: '8px',
-      font: 'inherit',
-      cursor: 'pointer',
-      boxShadow: '2px 3px 3px grey',
-     
-    }
-
     let persons = null;
-
     if (this.state.showPerson) {
       persons = (
         <div>
-          {/* iterate throgh array component using map method ES6 instead of for loop in react jsx*/}
-          {
+          <Persons
+            person={this.state.person}
+            clicked={this.deletePersonHandler}
+            changed={this.nameChangedHandler}
+            // isAuthenticated={this.state.authenticated} 
+            />
+
+
+
+
+          {/* iterate throgh array component using map method ES6 instead of for loop in react jsx */}
+          {/* { 
             this.state.person.map((person, index) => {
               return <Person name={person.name} age={person.age} key={person.id}
                 click={() => this.deletePersonHandler(index)}
                 changeInput={(event) => this.nameChangedhandler(event, person.id)} />
             })
           }
-
+          */}
 
 
           {/* <Person
@@ -108,35 +139,28 @@ class App extends Component {
 
         </div>
       );
-
-      buttonStyle.backgroundColor = 'red';
-     
-    }
-
-    let assignedClasses = [];
-    if (this.state.person.length <= 2) {
-      assignedClasses.push(classes.red);  // classes=['red']
-    }
-    if (this.state.person.length <= 1) {
-      assignedClasses.push(classes.bold);  // classes=['red','bold']
     }
 
     return (
-     
-        <div className={classes.App}>  {/* used css module*/}
-          <h1>I am React App</h1>
-          <p className={assignedClasses.join(' ')}>This is really working</p>
-          {/*<button onClick={this.switchNameHandler.bind(this,"karishma!!")}>Switch Name</button>  OR U CAN USE anonymous function */}
-          <button style={buttonStyle}
-        /*onClick={() => this.switchNameHandler('Kaitrina!!')}*/ onClick={this.togglePersonHandler} >Toggle Person</button>
 
-          {/*IF ELSE CONDITION IN JSX by using Ternory Operator to show Person Component */}
+      <WithClass classes={classes.App}>  {/* used css module*/}  {/* use of HOC to avoid un-necessary html elements*/}
 
-          {/*Person Data showed using (javascript-way)IF ELSE CONDITION in render function*/}
+        <Cockpit
 
+          person={this.state.person}
+          showPerson={this.state.showPerson}
+          clicked={this.togglePersonHandler}
+          login={this.loginHandler}/>
+        {/*IF ELSE CONDITION IN JSX by using Ternory Operator to show Person Component */}
+
+        {/*Person Data showed using (javascript-way)IF ELSE CONDITION in render function*/}
+        
+        <AuthContext.Provider value={this.state.authenticated} >
           {persons}
-        </div>
-     
+        </AuthContext.Provider>
+
+      </WithClass>
+
     );
   }
 }

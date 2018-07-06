@@ -1,9 +1,0 @@
-.person{
-    width: 60%;
-    border: 2px solid #eee;   /*#eee= light grey*/
-    margin: 15px;         
-    padding: 16px;
-    box-shadow: 2px 3px 3px #ccc ; /*#eee= dark grey  box-shadow: h-offset v-offset blur color*/  
-    text-align:center;
-    margin-left: 18%;
-}
